@@ -12,4 +12,3 @@ jeu = Game(fenetre, fond)
 
 jeu.lancer()
 pygame.quit()
-#Pour  push

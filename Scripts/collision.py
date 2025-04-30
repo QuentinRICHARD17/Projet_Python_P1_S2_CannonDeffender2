@@ -6,4 +6,3 @@ def detecter_collisions(boulets, bateaux):
                 bateau.pv -= 10
                 boulets.remove(boulet)
                 break
-                # Pour  push

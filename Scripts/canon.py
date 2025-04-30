@@ -7,4 +7,3 @@ class Canon:
     def tirer(self):
         from Scripts.projectile import Boulet
         return Boulet(position=self.position, vitesse=[self.puissance, -self.puissance])
-    # Pour  push

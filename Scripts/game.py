@@ -36,4 +36,3 @@ class Game:
             detecter_collisions(self.boulets, self.bateaux)
 
             pygame.display.flip()
-            # Pour  push

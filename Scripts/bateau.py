@@ -5,4 +5,3 @@ class Bateau:
 
     def avancer(self):
         self.position[0] -= 2
-        # Pour  push
