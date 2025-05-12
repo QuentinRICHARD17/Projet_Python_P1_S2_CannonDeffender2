@@ -15,7 +15,7 @@ class Game:
         self.fenetre = fenetre
         self.fond = fond
         self.chateau = {"pv": 100}
-        self.canon = Canon(position=(80, 210), angle=45, puissance=15)
+        self.canon = Canon(position=(80, 210), angle=0, puissance=400)
         self.bateaux = [Bateau(position=(1100, 350), pv=30)]
         self.boulets = []
         self.explosions = []
@@ -41,6 +41,10 @@ class Game:
                 else:
                     explosion.afficher(self.fenetre)
 
+            for boulet in self.boulets:
+                boulet.deplacement()
+                boulet.afficher(self.fenetre)
+
             self.interface.afficher_infos(self.fenetre, self.chateau["pv"], self.bateaux_tues, self.vague)
 
             for event in pygame.event.get():
@@ -51,22 +55,28 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         boulet = self.canon.tirer()
                         self.boulets.append(boulet)
+                    elif event.key == pygame.K_UP:
+                        self.canon.ajuster_angle(-5)
+                    elif event.key == pygame.K_DOWN:
+                        self.canon.ajuster_angle(5)
 
             for bateau in self.bateaux:
                 bateau.avancer()
 
-            for boulet in self.boulets:
-                boulet.deplacement()
-
             nb_avant = len(self.bateaux)
             detecter_collisions_boulet_bateau(self.boulets, self.bateaux)
-            self.bateaux_tues += nb_avant - len(self.bateaux)
+            nb_tues = nb_avant - len(self.bateaux)
+            self.bateaux_tues += nb_tues
 
             detecter_collisions_chateau_bateau(self.bateaux, self.chateau, self.explosions)
 
+            if self.bateaux_tues >= self.vague * 10:
+                self.vague += 1
+
             temps_actuel = pygame.time.get_ticks()
             if temps_actuel - self.temps_derniere_generation >= 10000:
-                self.bateaux.append(Bateau(position=(1100, 350), pv=30))
+                pv_bateau = 30 + self.vague * 10
+                self.bateaux.append(Bateau(position=(1100, 350), pv=pv_bateau))
                 self.temps_derniere_generation = temps_actuel
 
             pygame.display.flip()
