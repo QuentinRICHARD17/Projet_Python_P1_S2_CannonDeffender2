@@ -4,7 +4,7 @@ import math
 class Boulet:
     def __init__(self, position, angle_deg, vitesse):
         self.x0, self.y0 = position
-        self.angle_rad = math.radians(angle_deg)
+        self.angle_rad = math.radians(-angle_deg)
         self.vitesse = vitesse
         self.vx = vitesse * math.cos(self.angle_rad)
         self.vy_initial = -vitesse * math.sin(self.angle_rad)
