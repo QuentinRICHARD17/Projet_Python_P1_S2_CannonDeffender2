@@ -31,7 +31,7 @@ class Game:
                 bateau.avancer()
 
             for boulet in self.boulets:
-                boulet.mouvoir()
+                boulet.deplacement()
 
             detecter_collisions(self.boulets, self.bateaux)
 
