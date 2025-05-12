@@ -11,7 +11,7 @@ class Bateau:
         self.image = pygame.transform.scale(image_origine, (largeur, hauteur))
 
     def avancer(self):
-        self.position[0] -= 2
+        self.position[0] -= 1
 
     def afficher(self, surface):
         surface.blit(self.image, self.position)
