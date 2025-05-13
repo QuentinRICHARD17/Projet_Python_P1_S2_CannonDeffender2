@@ -1,82 +1,45 @@
 import pygame
-from Scripts.canon import Canon
-from Scripts.bateau import Bateau
-from Scripts.projectile import Boulet
-from Scripts.collision import (
-    detecter_collisions_boulet_bateau,
-    detecter_collisions_chateau_bateau,
-    Explosion
-)
-from Scripts.interface import Interface
+from Scripts.game import Game
+
+def afficher_accueil(fenetre, largeur, hauteur):
+    fond = pygame.image.load("ressources/images/FondPageAccueil.png")
+    fond = pygame.transform.scale(fond, (largeur, hauteur))
+
+    police = pygame.font.Font(None, 50)
+    texte_bouton = police.render("Jouer", True, (255, 255, 255))
+
+    bouton_rect = pygame.Rect(440, 550, 200, 60)
+
+    en_attente = True
+    while en_attente:
+        for evenement in pygame.event.get():
+            if evenement.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evenement.type == pygame.MOUSEBUTTONDOWN:
+                if bouton_rect.collidepoint(evenement.pos):
+                    en_attente = False
+
+        fenetre.blit(fond, (0, 0))
+        pygame.draw.rect(fenetre, (0, 120, 200), bouton_rect, border_radius=10)
+        fenetre.blit(texte_bouton, texte_bouton.get_rect(center=bouton_rect.center))
+        pygame.display.flip()
 
 
-class Game:
-    def __init__(self, fenetre, fond):
-        self.fenetre = fenetre
-        self.fond = fond
-        self.chateau = {"pv": 100}
-        self.canon = Canon(position=(80, 210), angle=0, puissance=400)
-        self.bateaux = [Bateau(position=(1100, 350), pv=30)]
-        self.boulets = []
-        self.explosions = []
-        self.temps_derniere_generation = pygame.time.get_ticks()
-        self.bateaux_tues = 0
-        self.vague = 1
-        self.police = pygame.font.Font(None, 36)
-        self.interface = Interface(self.police)
+def lancer_jeu():
+    pygame.init()
+    LARGEUR, HAUTEUR = 1080, 720
+    fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR))
 
-    def lancer(self):
-        running = True
-        while running:
-            self.fenetre.blit(self.fond, (0, 0))
+    afficher_accueil(fenetre, LARGEUR, HAUTEUR)
 
-            self.canon.afficher(self.fenetre)
+    fond_jeu = pygame.image.load("ressources/images/FondDuJeu.png")
+    fond_jeu = pygame.transform.scale(fond_jeu, (LARGEUR, HAUTEUR))
 
-            for bateau in self.bateaux:
-                bateau.afficher(self.fenetre)
+    jeu = Game(fenetre, fond_jeu)
+    jeu.lancer()
+    pygame.quit()
 
-            for explosion in self.explosions[:]:
-                if explosion.est_terminee():
-                    self.explosions.remove(explosion)
-                else:
-                    explosion.afficher(self.fenetre)
 
-            for boulet in self.boulets:
-                boulet.deplacement()
-                boulet.afficher(self.fenetre)
-
-            self.interface.afficher_infos(self.fenetre, self.chateau["pv"], self.bateaux_tues, self.vague)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        boulet = self.canon.tirer()
-                        self.boulets.append(boulet)
-                    elif event.key == pygame.K_UP:
-                        self.canon.ajuster_angle(-5)
-                    elif event.key == pygame.K_DOWN:
-                        self.canon.ajuster_angle(5)
-
-            for bateau in self.bateaux:
-                bateau.avancer()
-
-            nb_avant = len(self.bateaux)
-            detecter_collisions_boulet_bateau(self.boulets, self.bateaux)
-            nb_tues = nb_avant - len(self.bateaux)
-            self.bateaux_tues += nb_tues
-
-            detecter_collisions_chateau_bateau(self.bateaux, self.chateau, self.explosions)
-
-            if self.bateaux_tues >= self.vague * 10:
-                self.vague += 1
-
-            temps_actuel = pygame.time.get_ticks()
-            if temps_actuel - self.temps_derniere_generation >= 10000:
-                pv_bateau = 30 + self.vague * 10
-                self.bateaux.append(Bateau(position=(1100, 350), pv=pv_bateau))
-                self.temps_derniere_generation = temps_actuel
-
-            pygame.display.flip()
+if __name__ == "__main__":
+    lancer_jeu()
