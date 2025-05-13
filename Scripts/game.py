@@ -22,6 +22,8 @@ class Game:
         self.explosions = []
         self.bateaux_coules = []
         self.temps_derniere_generation = pygame.time.get_ticks()
+        self.temps_dernier_tir = 0
+        self.delai_tir = 1000
         self.bateaux_tues = 0
         self.vague = 1
         self.police = pygame.font.Font(None, 36)
@@ -61,8 +63,11 @@ class Game:
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        boulet = self.canon.tirer()
-                        self.boulets.append(boulet)
+                        maintenant = pygame.time.get_ticks()
+                        if maintenant - self.temps_dernier_tir >= self.delai_tir:
+                            boulet = self.canon.tirer()
+                            self.boulets.append(boulet)
+                            self.temps_dernier_tir = maintenant
                     elif event.key == pygame.K_UP:
                         self.canon.ajuster_angle(-5)
                     elif event.key == pygame.K_DOWN:
@@ -84,9 +89,11 @@ class Game:
 
             if self.bateaux_tues >= self.vague * 10:
                 self.vague += 1
+                for bateau in self.bateaux:
+                    bateau.pv += 10
 
             temps_actuel = pygame.time.get_ticks()
-            if temps_actuel - self.temps_derniere_generation >= 5000:
+            if temps_actuel - self.temps_derniere_generation >= 10000:
                 pv_bateau = 30 + self.vague * 10
                 self.bateaux.append(Bateau(position=(1100, 350), pv=pv_bateau))
                 self.temps_derniere_generation = temps_actuel
@@ -98,4 +105,4 @@ class Game:
         fond_game_over = pygame.transform.scale(fond_game_over, (self.fenetre.get_width(), self.fenetre.get_height()))
         self.fenetre.blit(fond_game_over, (0, 0))
         pygame.display.flip()
-        pygame.time.wait(5000)
+        pygame.time.wait(3000)
