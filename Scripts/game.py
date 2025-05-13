@@ -64,7 +64,7 @@ class Game:
                 bateau.avancer()
 
             nb_avant = len(self.bateaux)
-            detecter_collisions_boulet_bateau(self.boulets, self.bateaux)
+            detecter_collisions_boulet_bateau(self.boulets, self.bateaux, self.explosions)
             nb_tues = nb_avant - len(self.bateaux)
             self.bateaux_tues += nb_tues
 

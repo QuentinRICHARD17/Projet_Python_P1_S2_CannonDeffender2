@@ -16,17 +16,24 @@ class Explosion:
         return pygame.time.get_ticks() - self.start_time > 1000
 
 
-def detecter_collisions_boulet_bateau(boulets, bateaux):
+def detecter_collisions_boulet_bateau(boulets, bateaux, explosions):
     for boulet in boulets[:]:
+        rect_boulet = pygame.Rect(boulet.position[0], boulet.position[1],
+                                  boulet.image.get_width(), boulet.image.get_height())
         for bateau in bateaux[:]:
-            if (int(boulet.position[0]) in range(int(bateau.position[0]), int(bateau.position[0]) + 50) and
-                int(boulet.position[1]) in range(int(bateau.position[1]), int(bateau.position[1]) + 50)):
+            rect_bateau = pygame.Rect(bateau.position[0], bateau.position[1],
+                                      bateau.image.get_width(), bateau.image.get_height())
+
+            if rect_boulet.colliderect(rect_bateau):
                 bateau.pv -= 10
+
+                explosions.append(Explosion(boulet.position.copy()))
+
                 if bateau.pv <= 0:
                     bateaux.remove(bateau)
+
                 boulets.remove(boulet)
                 break
-
 
 def detecter_collisions_chateau_bateau(bateaux, chateau, explosions):
     for bateau in bateaux[:]:
