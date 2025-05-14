@@ -1,4 +1,5 @@
 import pygame
+from Scripts.sons import jouer_son_explosion
 
 class Explosion:
     def __init__(self, position):
@@ -40,6 +41,7 @@ def detecter_collisions_boulet_bateau(boulets, bateaux, explosions, bateaux_coul
 
             if rect_boulet.colliderect(rect_bateau):
                 explosions.append(Explosion(boulet.position.copy()))
+                jouer_son_explosion()
                 bateau.pv -= 10
 
                 if bateau.pv <= 0:
@@ -57,4 +59,5 @@ def detecter_collisions_chateau_bateau(bateaux, chateau, explosions):
         if bateau.a_touche_chateau():
             bateaux.remove(bateau)
             chateau["pv"] -= 20
+            jouer_son_explosion()
             explosions.append(Explosion(bateau.position.copy()))
