@@ -56,5 +56,5 @@ def detecter_collisions_chateau_bateau(bateaux, chateau, explosions):
     for bateau in bateaux[:]:
         if bateau.a_touche_chateau():
             bateaux.remove(bateau)
-            chateau["pv"] -= 10
+            chateau["pv"] -= 20
             explosions.append(Explosion(bateau.position.copy()))
