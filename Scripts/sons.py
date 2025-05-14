@@ -17,4 +17,4 @@ def jouer_musique_de_fond():
 
 def jouer_compte_rebours():
     son_compte_rebours.play()
-#met les sons ici lucas
+#met les sons ici lucass
