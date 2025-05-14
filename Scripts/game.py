@@ -2,13 +2,10 @@ import pygame
 from Scripts.canon import Canon
 from Scripts.bateau import Bateau
 from Scripts.projectile import Boulet
-from Scripts.collision import (
-    detecter_collisions_boulet_bateau,
-    detecter_collisions_chateau_bateau,
-    Explosion,
-    BateauCouleTemporaire
-)
+from Scripts.collision import *
 from Scripts.interface import Interface
+from Scripts.sons import *
+
 
 
 class Game:
@@ -30,6 +27,9 @@ class Game:
         self.interface = Interface(self.police)
 
     def lancer(self):
+        jouer_compte_rebours()
+        pygame.time.wait(3000)
+        jouer_musique_de_fond()
         running = True
         while running:
             self.fenetre.blit(self.fond, (0, 0))
@@ -102,6 +102,7 @@ class Game:
 
     def afficher_game_over(self):
         fond_game_over = pygame.image.load("ressources/images/FondPageGameOver.png")
+        jouer_son_game_over()
         fond_game_over = pygame.transform.scale(fond_game_over, (self.fenetre.get_width(), self.fenetre.get_height()))
         self.fenetre.blit(fond_game_over, (0, 0))
         pygame.display.flip()
