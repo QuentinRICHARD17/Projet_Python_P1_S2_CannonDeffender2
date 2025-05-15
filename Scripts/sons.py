@@ -2,7 +2,7 @@ import pygame
 pygame.mixer.init()
 
 son_explosion = pygame.mixer.Sound("ressources/Sounds/Explosion_Myinstants.mp3")
-son_explosion.set_volume(0.3)  # 0.0 = muet et 1.0 = max
+son_explosion.set_volume(0.5)  # 0.0 = muet et 1.0 = max
 son_game_over = pygame.mixer.Sound("ressources/Sounds/GameOver_Myinstants.mp3")
 musique_fond = "ressources/Sounds/MusiqueDeFondPiratesLibreDeDroit.mp3"
 son_compte_rebours = pygame.mixer.Sound("ressources/Sounds/3_2_1_Go_Myinstants.mp3")
